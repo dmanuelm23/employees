@@ -15,10 +15,10 @@ Este proyecto fue creado con PHP versión 7.4.28, con Laravel Framework versión
 - `http://127.0.0.1:8000/`
 
 - APIs
-- http://127.0.0.1:8000//api/listemployees
+- http://127.0.0.1:8000/api/listemployees
 
 - METODO POST PARA REGISTRAR
-- http://127.0.0.1:8000//api/employees
+- http://127.0.0.1:8000/api/employees
 
 DISEÑO DE PAGINA CON EL FRONT
-- http://127.0.0.1:8000//api/employees
+- http://127.0.0.1:8000/api/employees
