@@ -32,6 +32,7 @@ class StoreEmployeesPost extends FormRequest
             'position' => ['required'],
             'birthdate'=>['required', 'date'],
             'address'=>['required'],
+            'skills'=>['required'],
         ];
     }
 
@@ -44,6 +45,7 @@ class StoreEmployeesPost extends FormRequest
             'position.required' => 'El puesto es requerido.',
             'birthdate.required'=> 'La fecha de cumpleaños es requerida',
             'address.required'=> 'La dirección es requerida',
+            'skills.required'=> 'Las habilidades son requeridas',
         ];
     }
 
