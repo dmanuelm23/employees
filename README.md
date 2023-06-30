@@ -8,7 +8,7 @@ Este proyecto fue creado con PHP versión 7.4.28, con Laravel Framework versión
 - Correr en consola __composer install__
 - Correr en consola __npm install__
 - Correr __php artisan key:generate__
-- Correr __php artisan migrate __
+- Correr __php artisan migrate__
 - Correr __php artisan serve__
 - Copia la ruta principal generada por __php artisan serve__ en tu navegador 
 - Ejemplos: 
