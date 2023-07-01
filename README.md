@@ -22,3 +22,11 @@ Este proyecto fue creado con PHP versión 7.4.28, con Laravel Framework versión
 
 DISEÑO DE PAGINA CON EL FRONT
 - http://127.0.0.1:8000/api/employees
+
+MEJORAS HECHAS EL DIA 01/07/2023 HORA DE INICIO 09:00 AM TERMINO 11:45AM
+RAZONES POR QUE LO HICE HOY NO TENIA UN SERVIDOR ME PRESTARON UNO
+NO TENIA MI API KEY DE GOOGLE YA LA TENGO Y FUNCIONA
+URL https://employees.marketinghl.com/api/employees
+API LISTA DE EMPLEADOS:
+https://employees.marketinghl.com/api/listemployees
+
