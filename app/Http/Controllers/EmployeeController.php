@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Skill;
+use GuzzleHttp\Client;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreEmployeesPost;
@@ -52,14 +53,50 @@ class EmployeeController extends Controller
         ]);
     }
 
-
     public function getList()
     {
         $employees = Employee::with('skills')->orderBy('id', 'DESC')->get();
-
+        $dataEmployees=[];
+        foreach ($employees as $key => $employee) {
+            $coordinatesEmployee = $this->getCoordinates($employee->address);
+            $arrayAux = [
+                "id" => $employee->id,
+                "name" => $employee->name,
+                "address" => $employee->address,
+                "position" => $employee->position,
+                "birthdate" => date("d/m/Y", strtotime($employee->birthdate)),
+                "birthdate2" => $employee->birthdate,
+                "latitude" =>  $coordinatesEmployee['latitude'],
+                "longitude" =>  $coordinatesEmployee['longitude'],
+                "skills" => $employee->skills,
+            ];
+            array_push($dataEmployees, $arrayAux);
+        }
         return response()->json([
-            'employees' => $employees
+            'employees' => $dataEmployees,
         ],
         200);
+    }
+
+    public function getCoordinates($address)
+    {
+        $coordinates =[];
+        $client = new Client();
+        $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
+            'query' => [
+                'address' => $address,
+                'key' => 'AIzaSyB-DlFu4I63lUpXonx23PWL-39C4GafBRM',
+            ],
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+
+        if ($data['status'] === 'OK') {
+            $latitude = $data['results'][0]['geometry']['location']['lat'];
+            $longitude = $data['results'][0]['geometry']['location']['lng'];
+            $coordinates =['latitude' => $latitude, 'longitude'=>$longitude];
+            return $coordinates;
+        }
+        return ['error' => 'Dirección no encontrada'];
     }
 }

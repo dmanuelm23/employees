@@ -32,9 +32,11 @@
         "datatables.net-dt": "^1.12.1",
         "jquery": "^3.6.0",
         "jszip": "^3.10.0",
+        "moment": "^2.29.4",
         "pdfmake": "^0.2.5",
         "remixicon": "^2.5.0",
         "vue": "^3.2.36",
-        "vue-jquery-mask": "^2.0.0"
+        "vue-jquery-mask": "^2.0.0",
+        "vue3-google-map": "^0.15.0"
     }
 }

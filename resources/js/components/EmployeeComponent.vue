@@ -9,7 +9,7 @@
                 <table class="table table-striped dt-responsive nowrap" id="employees">
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Ubicación</th>
                             <th>Nombre</th>
                             <th>Correo</th>
                             <th>Puesto</th>
@@ -20,21 +20,24 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th></th>
+                            <th>Ubicación</th>
                             <th>Nombre</th>
                             <th>Correo</th>
                             <th>Puesto</th>
                             <th>Fecha de nacimiento</th>
+                             <th>Domicilio</th>
                             <th>Habilidades</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         <tr v-for="employee in employees" :key="employee.id">
-                            <td>{{ employee.id }}</td>
+                            <td>
+                                <a class="text-decoration-none me-2" @click="openModalMap(employee)" href="#" title="Ubicación"><i class="ri-map-pin-line"></i></a>
+                            </td>
                             <td>{{ employee.name }}</td>
                             <td>{{ employee.email }}</td>
                             <td>{{ employee.position }}</td>
-                            <td>{{ employee.birthdate }}</td>
+                            <td>{{ formatDate(employee.birthdate2)}}</td>
                             <td>{{ employee.address }}</td>
                             <td><span v-for="(skill, index) in employee.skills" :key="index">{{ skill.skill}}</span></td>
                         </tr>
@@ -100,6 +103,39 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal_map" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapEmployeeUserModalLabel">Ubicación del empleado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click.prevent="reset()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <br>
+                            Nombre {{employee_name}}
+                            <br>
+                            Correo Electrónico {{employee_email}}
+                            <br>
+                            Dirección {{employee_address}}
+                            <br>
+                            Puesto {{employee_position}}
+                            <br>
+                            Fecha de nacimiento {{employee_birthdate}}
+                        </div>
+                    </div>
+                    <div v-if="lat!=0&&lng!=0">
+                        <MapComponent :latitude="lat" :longitude="lng"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button @click="reset()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 //Bootstrap and jQuery libraries
@@ -121,10 +157,13 @@ window.JSZip = JSZip;
 import $ from "jquery";
 import axios from "axios";
 import Notification from "./Notification";
+import MapComponent from "./MapComponent";
+import moment from 'moment';
 export default {
-    inject: ["datatablesConfigUser"],
+    inject: ["datatablesConfigEmployee"],
     components: {
         Notification,
+        MapComponent
     },
     data() {
         return {
@@ -146,12 +185,35 @@ export default {
             option: "",
             employee_id: "",
             employee_name: "",
+            employee_email: "",
+            employee_address: "",
+            employee_position: "",
+            employee_birthdate: "",
             employee_status:1,
             dataTable: null,
             messageAlert:0,
+            lat:0,
+            lng:0,
+            date:'',
+            month:'',
+            year:'',
+            
         };
     },
     methods: {
+        formatDate(value){
+            return moment(value).format('DD/MM/YYYY');
+        },
+         openModalMap(data) {
+            this.lat = data.latitude;
+            this.lng = data.longitude;
+            this.employee_name= data.name;
+            this.employee_email= data.email;
+            this.employee_address= data.address;
+            this.employee_position= data.position;            
+            this.employee_birthdate =  moment(data.birthdate2).format('DD/MM/YYYY');
+            this.mapModal.show();
+        },
         cambiarMsgAlert(value){
             this.messageAlert= value;
         },
@@ -210,6 +272,8 @@ export default {
             }
         },
         reset() {
+            this.lat = 0;
+            this.lng = 0;
             this.employee_id = "";
             this.employee_name = "";
             this.dataEmployee.id = null;
@@ -227,6 +291,10 @@ export default {
     this.employeeModal = new bootstrap.Modal(
       document.getElementById("modal_add_employee")
     );
+
+    this.mapModal = new bootstrap.Modal(
+      document.getElementById("modal_map")
+    );
     var tooltipTriggerList = [].slice.call(
       document.querySelectorAll('[data-bs-toggle="tooltip"]')
     );
@@ -237,7 +305,7 @@ export default {
   created() {
     let self = this;
     this.$nextTick(() => {
-      self.dataTable = $("#employees").DataTable(self.datatablesConfigUser);
+      self.dataTable = $("#employees").DataTable(self.datatablesConfigEmployee);
       new $.fn.dataTable.Buttons(self.dataTable, {
         name: "otherButton",
         buttons: [
@@ -265,6 +333,7 @@ export default {
     errors: function (newVal) {
       if (Object.values(newVal).length == 0) {
         this.employeeModal.hide();
+        this.mapModal.hide();
         this.reset();
       }
     },
@@ -274,7 +343,7 @@ export default {
         self.dataTable.destroy();
       }
       this.$nextTick(() => {
-        self.dataTable = $("#employees").DataTable(self.datatablesConfigUser);
+        self.dataTable = $("#employees").DataTable(self.datatablesConfigEmployee);
         new $.fn.dataTable.Buttons(self.dataTable, {
           name: "otherButton",
           buttons: [

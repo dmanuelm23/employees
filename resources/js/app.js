@@ -2,6 +2,8 @@ import { createApp } from 'vue';
 import 'remixicon/fonts/remixicon.css'
 
 import EmployeeComponent from './components/EmployeeComponent';
+import MapComponent from './components/MapComponent';
+
 var languageDatatable = {
     "processing": "Procesando...",
     "lengthMenu": "Mostrar _MENU_ registros",
@@ -284,7 +286,7 @@ var datatablesConfig = {
     ]
 }
 
-var datatablesConfigUser = {
+var datatablesConfigEmployee = {
     language: languageDatatable,
     dom: "B<'row mb-2'><'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-4'i>><'row'<'#colvis'>p>",
     buttons: [
@@ -329,11 +331,12 @@ var datatablesConfigUser = {
 
 const app = createApp({
     components: {
-        EmployeeComponent
+        EmployeeComponent,
+        MapComponent
     },
     provide: {
         'datatablesConfig': datatablesConfig,
-        'datatablesConfigUser': datatablesConfigUser,
+        'datatablesConfigEmployee': datatablesConfigEmployee,
     }
 })
 app.mount('#app');
