@@ -127,7 +127,7 @@
                         </div>
                     </div>
                     <div v-if="lat!=0&&lng!=0">
-                        <MapComponent :latitude="lat" :longitude="lng"/>
+                        <MapComponent :latitude="lat" :longitude="lng"  :apikey="dataapikey"/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -164,6 +164,12 @@ export default {
     components: {
         Notification,
         MapComponent
+    },
+    props:{
+        dataapikey:{
+            type: String,
+            required: true,
+        },
     },
     data() {
         return {

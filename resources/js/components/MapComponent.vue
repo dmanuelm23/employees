@@ -1,5 +1,5 @@
 <template>
-  <GoogleMap api-key="AIzaSyB-DlFu4I63lUpXonx23PWL-39C4GafBRM" style="width: 100%; height: 500px" :center="center" :zoom="15">
+  <GoogleMap :api-key=apikey style="width: 100%; height: 500px" :center="center" :zoom="15">
     <Marker :options="{ position: center }" />
   </GoogleMap>
 </template>
@@ -17,6 +17,10 @@ export default {
             type: Number,
             required: true,
         },
+        apikey:{
+          type: String,
+          required: true,
+        }
 
     },
    data() {

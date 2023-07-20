@@ -17,7 +17,11 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return view('employees.index');
+        return view('employees.index',
+            [
+                'apikey' => ENV('API_KEY_GOOGLE_MAPS')
+            ]
+        );
     
     }
 
@@ -66,8 +70,8 @@ class EmployeeController extends Controller
                 "position" => $employee->position,
                 "birthdate" => date("d/m/Y", strtotime($employee->birthdate)),
                 "birthdate2" => $employee->birthdate,
-                "latitude" =>  $coordinatesEmployee['latitude'],
-                "longitude" =>  $coordinatesEmployee['longitude'],
+                "latitude" => isset($coordinatesEmployee['error'])?$coordinatesEmployee['error']:$coordinatesEmployee['latitude'],
+                "longitude" =>  isset($coordinatesEmployee['error'])?$coordinatesEmployee['error']:$coordinatesEmployee['longitude'],
                 "skills" => $employee->skills,
             ];
             array_push($dataEmployees, $arrayAux);
@@ -85,7 +89,7 @@ class EmployeeController extends Controller
         $response = $client->get('https://maps.googleapis.com/maps/api/geocode/json', [
             'query' => [
                 'address' => $address,
-                'key' => 'AIzaSyBtr3l7m74BqIDjy_70oCcWbQwW5eztxq8',
+                'key' => ENV('API_KEY_GOOGLE_MAPS'),
             ],
         ]);
 
@@ -97,6 +101,6 @@ class EmployeeController extends Controller
             $coordinates =['latitude' => $latitude, 'longitude'=>$longitude];
             return $coordinates;
         }
-        return ['error' => 'Dirección no encontrada'];
+        return ['error' => 'No se pudo obtener la información'];
     }
 }
