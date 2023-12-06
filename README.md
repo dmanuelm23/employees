@@ -23,8 +23,5 @@ Este proyecto fue creado con PHP versión 7.4.28, con Laravel Framework versión
 DISEÑO DE PAGINA CON EL FRONT
 - http://127.0.0.1:8000/api/employees
 
-MEJORAS:
-URL https://employees.marketinghl.com/api/employees
-API LISTA DE EMPLEADOS:
-https://employees.marketinghl.com/api/listemployees
+
 
